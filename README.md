@@ -40,7 +40,7 @@ simple microservices using kafka for orchestration
 
 6. Post order request to endpoint `/api/order/create`
 
-## Test Schenario
+## Test Scenario
 
 1. Inventory INSTOCK -> Payment APPROVED -> Order COMPLETED
 
