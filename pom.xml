@@ -14,6 +14,15 @@
 	<name>bootcamp-final-microservice</name>
 	<description>Bootcamp final project create microservice saga orchestration</description>
 	<packaging>pom</packaging>
+	
+	<modules>
+		<module>common</module>
+		<module>order-ms</module>
+		<module>inventory-ms</module>
+		<module>payment-ms</module>
+		<module>order-orchestrator</module>
+	</modules>
+	
 	<url/>
 	<licenses>
 		<license/>
@@ -92,12 +101,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<modules>
-		<module>common</module>
-		<module>order-ms</module>
-		<module>inventory-ms</module>
-		<module>payment-ms</module>
-		<module>order-orchestrator</module>
-	</modules>
+	
 </project>
