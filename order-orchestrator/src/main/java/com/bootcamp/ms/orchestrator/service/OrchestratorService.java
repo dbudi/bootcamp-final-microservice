@@ -66,6 +66,16 @@ public class OrchestratorService {
 													return orderServiceClient.updateOrder(orderRequest);
 												});
 									}									
+								})
+								.onErrorResume(error -> {
+									log.error("payment service error", error);
+									log.info("payment service error, ROLLBACK inventory");
+									return inventoryServiceClient.add(getInventoryRequest(orderRequest))
+											.flatMap(addInventory -> {
+												log.info("payment service error, update order status FAILED");
+												orderRequest.setStatus(OrderStatus.FAILED);
+												return orderServiceClient.updateOrder(orderRequest);
+											});
 								});
 					} else {
 						// inventory status OUTOFSTOCK
@@ -74,6 +84,11 @@ public class OrchestratorService {
 						orderRequest.setStatus(OrderStatus.FAILED);
 						return orderServiceClient.updateOrder(orderRequest);
 					}
+				})
+				.onErrorResume(error -> {
+					log.error("inventory service error", error);
+					orderRequest.setStatus(OrderStatus.FAILED);
+					return orderServiceClient.updateOrder(orderRequest);
 				});
     }
 	
@@ -83,8 +98,5 @@ public class OrchestratorService {
 	
 	private InventoryRequest getInventoryRequest(OrderRequest orderRequest) {
 		return InventoryRequest.builder().orderId(orderRequest.getOrderId()).productId(orderRequest.getProductId()).quantity(orderRequest.getQuantity()).build();
-	}
-
-	
-	
+	}	
 }
